@@ -1,6 +1,8 @@
 # somesy - Social Media Sync
 
-A serverless Google Cloud Run function that syncs LinkedIn posts to a Slack channel.
+![somesy](logo/somesy_200px.jpg)
+
+A serverless Google Cloud Run function that syncs LinkedIn organization posts to a Slack channel.
 
 ## Configuration
 
@@ -20,7 +22,7 @@ to [apply](https://learn.microsoft.com/en-us/linkedin/shared/authentication/gett
 
 1. Go to <https://www.linkedin.com/developers/tools/oauth>
 2. Select the app you want to use
-3. Select scope `r_organization_social`
+3. Select scope `r_organization_social` for organizations amd `r_member_social` for individuals
 4. Generate a token
 
 ## Google Cloud Run
