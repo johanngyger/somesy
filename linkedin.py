@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+import urllib.parse
 
 import requests
 
@@ -17,9 +18,12 @@ def recent_linkedin_posts(max_age_in_hours: int = 24):
         'X-Restli-Protocol-Version': '2.0.0',
         'LinkedIn-Version': '202405'
     }
+    # https://learn.microsoft.com/en-us/linkedin/shared/api-guide/concepts/urns
+    # urn:{namespace}:{entityType}:{id}, where: entityType is 'organization or person
+    author = urllib.parse.quote_plus(os.getenv('LINKEDIN_AUTHOR') or '')
     # https://learn.microsoft.com/en-us/linkedin/marketing/community-management/shares/posts-api?view=li-lms-2024-10&tabs=http#find-posts-by-authors
     response = requests.get(
-        'https://api.linkedin.com/rest/posts?author=urn%3Ali%3Aorganization%3A37403445&q=author&count=10&sortBy=CREATED',
+        f'https://api.linkedin.com/rest/posts?author={author}&q=author&count=10&sortBy=CREATED',
         headers=headers)
     if response.status_code != 200:
         raise Exception(f'LinkedIn API request failed with status {response.status_code}: {response.text}')
