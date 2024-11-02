@@ -1,0 +1,8 @@
+README.md
+.env
+.gcloudignore
+.git
+.gitignore
+.idea
+requirements-test.txt
+*test.py
