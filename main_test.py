@@ -1,6 +1,6 @@
-from dotenv import load_dotenv
+import dotenv
 
 import sync
 
-_ = load_dotenv()
-sync.linkedin_to_slack(7*24)
+_ = dotenv.load_dotenv(verbose=True, override=True)
+sync.linkedin_to_slack(7 * 24)

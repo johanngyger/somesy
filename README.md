@@ -2,13 +2,13 @@
 
 ![somesy](logo/somesy_200px.jpg)
 
-A serverless Google Cloud Run function that syncs LinkedIn organization posts to a Slack channel.
+A serverless Google Cloud Run function that syncs LinkedIn posts to a Slack channel.
 
 ## Configuration
 
 The following environment variables are required:
 
-- `LINKEDIN_TOKEN`: LinkedIn API token. See the section below how to get one
+- `LINKEDIN_TOKEN`: LinkedIn OAuth token
 - `LINKEDIN_AUTHOR`: LinkedIn organization or person URN to read posts from
 - `SLACK_TOKEN`: Slack bot user OAuth token
 - `SLACK_CHANNEL_ID`: Slack channel ID to post messages to
@@ -28,15 +28,19 @@ to [apply](https://learn.microsoft.com/en-us/linkedin/shared/authentication/gett
 
 ### Slack
 
-Create a Slack app: <https://api.slack.com/apps>.
+Create a Slack app in order to get API access: <https://api.slack.com/apps>.
 
-Under OAuth & Permissions, set the following Bot Token Scopes: `channels:history` (public and private), `channels:read`, `chat:write`. 
+Under OAuth & Permissions, set the following Bot Token Scopes:
+
+- `channels:history` (public and/or private)
+- `channels:read`
+- `chat:write`
 
 ## Google Cloud Run
 
 ### Deploying the function
 
-```sh
+```shell
 gcloud functions deploy somesy --gen2 --runtime=python312 --region=europe-west6 --source=. --trigger-topic=somesy
 ```
 
@@ -54,7 +58,7 @@ SLACK_TOKEN=...
 
 Install the required packages and run the function locally:
 
-```
-pip install -r requirements-test.txt
+```shell
+pip install pip install -r requirements.txt -r requirements-test.txt
 python main_test.py
 ```
