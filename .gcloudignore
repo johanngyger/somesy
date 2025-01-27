@@ -1,4 +1,6 @@
 README.md
+logo
+.venv
 .env*
 .gcloudignore
 .git
