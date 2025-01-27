@@ -59,6 +59,8 @@ SLACK_TOKEN=...
 Install the required packages and run the function locally:
 
 ```shell
-pip install pip install -r requirements.txt -r requirements-test.txt
+pythons -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt -r requirements-test.txt
 python main_test.py
 ```
