@@ -8,8 +8,11 @@ import responses
 import linkedin
 
 
+from typing import Any, Dict, Generator, List
+
+
 @pytest.fixture
-def mock_env_vars():
+def mock_env_vars() -> Generator[None, None, None]:
     with patch.dict(
         os.environ, {"LINKEDIN_TOKEN": "fake-token", "LINKEDIN_AUTHOR": "urn:li:organization:12345"}
     ):
@@ -17,7 +20,7 @@ def mock_env_vars():
 
 
 @pytest.fixture
-def mock_linkedin_response():
+def mock_linkedin_response() -> Dict[str, List[Dict[str, Any]]]:
     post_time = int((datetime.now() - timedelta(hours=12)).timestamp() * 1000)
     return {
         "elements": [
@@ -40,7 +43,7 @@ def mock_linkedin_response():
     }
 
 
-def test_age_in_hours():
+def test_age_in_hours() -> None:
     # Test with a post from 5 hours ago
     now = datetime.now()
     post_time = int((now - timedelta(hours=5)).timestamp() * 1000)
@@ -52,13 +55,15 @@ def test_age_in_hours():
     assert 4.9 < age < 5.1
 
 
-def test_is_in_main_feed():
+def test_is_in_main_feed() -> None:
     assert linkedin.is_in_main_feed({"distribution": {"feedDistribution": "MAIN_FEED"}}) is True
     assert linkedin.is_in_main_feed({"distribution": {"feedDistribution": "NONE"}}) is False
 
 
 @responses.activate
-def test_recent_linkedin_posts(mock_env_vars, mock_linkedin_response):
+def test_recent_linkedin_posts(
+    mock_env_vars: None, mock_linkedin_response: Dict[str, List[Dict[str, Any]]]
+) -> None:
     # Setup mock response
     responses.add(
         responses.GET,
@@ -76,7 +81,7 @@ def test_recent_linkedin_posts(mock_env_vars, mock_linkedin_response):
 
 
 @responses.activate
-def test_linkedin_api_error(mock_env_vars):
+def test_linkedin_api_error(mock_env_vars: None) -> None:
     # Mock a failed API response
     responses.add(
         responses.GET,

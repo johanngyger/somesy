@@ -5,7 +5,7 @@ import functions_framework
 import main
 
 
-def test_somesy_cloud_function():
+def test_somesy_cloud_function() -> None:
     # Mock the sync module
     with patch("main.sync.linkedin_to_slack") as mock_sync:
         # Create a mock cloud event

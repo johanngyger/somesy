@@ -1,11 +1,11 @@
 import os
-from typing import Any
+from typing import Any, Dict, List
 
 from slack_sdk import WebClient
 from slack_sdk.web import SlackResponse
 
 
-def slack_channel_id():
+def slack_channel_id() -> str:
     return os.getenv("SLACK_CHANNEL_ID", "")
 
 
@@ -14,13 +14,13 @@ def slack_client() -> WebClient:
     return WebClient(token=slack_token)
 
 
-def slack_messages() -> list[dict[str, Any]]:
+def slack_messages() -> List[Dict[str, Any]]:
     # find existing messages in channel
     # https://api.slack.com/methods/conversations.history
     channel_id = slack_channel_id()
     response: SlackResponse = slack_client().conversations_history(channel=channel_id)
     print(f"Slack messages from channel {channel_id}: {response}")
-    messages: list[dict[str, Any]] = response["messages"]
+    messages: List[Dict[str, Any]] = response["messages"]
     return messages
 
 

@@ -5,3 +5,4 @@ pytest-cov
 responses
 ruff
 mypy
+types-requests

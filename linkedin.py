@@ -1,23 +1,24 @@
 import os
 import urllib.parse
 from datetime import datetime
+from typing import Any, Dict, List
 
 import requests
 
 
-def age_in_hours(post) -> float:
+def age_in_hours(post: Dict[str, Any]) -> float:
     created: datetime = datetime.fromtimestamp(post["createdAt"] / 1000.0)
     age: float = (datetime.now() - created).total_seconds() / 3600
     return age
 
 
-def is_in_main_feed(post) -> bool:
-    return post["distribution"]["feedDistribution"] == "MAIN_FEED"
+def is_in_main_feed(post: Dict[str, Any]) -> bool:
+    return str(post["distribution"]["feedDistribution"]) == "MAIN_FEED"
 
 
-def recent_linkedin_posts(max_age_in_hours: int = 24) -> list[dict[str, str]]:
+def recent_linkedin_posts(max_age_in_hours: int = 24) -> List[Dict[str, Any]]:
     linkedin_token = os.getenv("LINKEDIN_TOKEN")
-    headers: dict[str, str] = {
+    headers: Dict[str, str] = {
         "Authorization": f"Bearer {linkedin_token}",
         "X-Restli-Protocol-Version": "2.0.0",
         "LinkedIn-Version": "202405",
@@ -34,8 +35,8 @@ def recent_linkedin_posts(max_age_in_hours: int = 24) -> list[dict[str, str]]:
         raise Exception(
             f"LinkedIn API request failed with status {response.status_code}: {response.text}"
         )
-    posts: list[dict[str, str]] = response.json()["elements"]
-    recent_posts: list[dict[str, str]] = [
+    posts: List[Dict[str, Any]] = response.json()["elements"]
+    recent_posts: List[Dict[str, Any]] = [
         post for post in posts if is_in_main_feed(post) and age_in_hours(post) < max_age_in_hours
     ]
     print(f"Recent LinkedIn posts: {recent_posts}")

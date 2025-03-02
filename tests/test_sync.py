@@ -5,20 +5,25 @@ import pytest
 import sync
 
 
+from typing import Any, Dict, List
+
+
 @pytest.fixture
-def mock_linkedin_posts():
+def mock_linkedin_posts() -> List[Dict[str, str]]:
     return [{"id": "post-1"}, {"id": "post-2"}]
 
 
 @pytest.fixture
-def mock_slack_messages():
+def mock_slack_messages() -> List[Dict[str, str]]:
     return [
         {"text": "https://www.linkedin.com/feed/update/post-1"},
         {"text": "Just a regular message"},
     ]
 
 
-def test_linkedin_to_slack_new_posts(mock_linkedin_posts, mock_slack_messages):
+def test_linkedin_to_slack_new_posts(
+    mock_linkedin_posts: List[Dict[str, str]], mock_slack_messages: List[Dict[str, str]]
+) -> None:
     # Mock the LinkedIn and Slack modules
     with patch(
         "sync.linkedin.recent_linkedin_posts", return_value=mock_linkedin_posts
@@ -41,7 +46,7 @@ def test_linkedin_to_slack_new_posts(mock_linkedin_posts, mock_slack_messages):
                 )
 
 
-def test_linkedin_to_slack_no_new_posts():
+def test_linkedin_to_slack_no_new_posts() -> None:
     # Mock the LinkedIn and Slack modules with no new posts
     with patch(
         "sync.linkedin.recent_linkedin_posts", return_value=[{"id": "post-1"}]

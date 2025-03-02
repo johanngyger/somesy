@@ -7,15 +7,18 @@ from slack_sdk import WebClient
 import slackc
 
 
+from typing import Any, Dict, Generator, List
+
+
 @pytest.fixture
-def mock_env_vars():
+def mock_env_vars() -> Generator[None, None, None]:
     with patch.dict(
         os.environ, {"SLACK_TOKEN": "fake-slack-token", "SLACK_CHANNEL_ID": "C12345678"}
     ):
         yield
 
 
-def test_slack_channel_id():
+def test_slack_channel_id() -> None:
     with patch.dict(os.environ, {"SLACK_CHANNEL_ID": "test-channel"}):
         assert slackc.slack_channel_id() == "test-channel"
 
@@ -24,7 +27,7 @@ def test_slack_channel_id():
         assert slackc.slack_channel_id() == ""
 
 
-def test_slack_client():
+def test_slack_client() -> None:
     with patch.dict(os.environ, {"SLACK_TOKEN": "test-token"}):
         client = slackc.slack_client()
         assert isinstance(client, WebClient)
@@ -32,7 +35,7 @@ def test_slack_client():
 
 
 @pytest.fixture
-def mock_slack_response():
+def mock_slack_response() -> Dict[str, Any]:
     return {
         "ok": True,
         "messages": [
@@ -42,7 +45,7 @@ def mock_slack_response():
     }
 
 
-def test_slack_messages(mock_env_vars):
+def test_slack_messages(mock_env_vars: None) -> None:
     with patch.object(slackc, "slack_client") as mock_client:
         mock_instance = MagicMock()
         mock_client.return_value = mock_instance
@@ -60,7 +63,7 @@ def test_slack_messages(mock_env_vars):
         assert messages[0]["text"] == "Message 1"
 
 
-def test_post_slack_message(mock_env_vars):
+def test_post_slack_message(mock_env_vars: None) -> None:
     with patch.object(slackc, "slack_client") as mock_client:
         mock_instance = MagicMock()
         mock_client.return_value = mock_instance
