@@ -7,7 +7,7 @@ from slack_sdk import WebClient
 import slackc
 
 
-from typing import Any, Dict, Generator, List
+from typing import Any, Dict, Generator
 
 
 @pytest.fixture

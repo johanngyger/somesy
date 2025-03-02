@@ -5,7 +5,7 @@ import pytest
 import sync
 
 
-from typing import Any, Dict, List
+from typing import Dict, List
 
 
 @pytest.fixture

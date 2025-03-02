@@ -46,7 +46,7 @@ gcloud functions deploy <function-name> --gen2 --runtime=python312 --region=euro
 
 ## Local development and testing
 
-### Configure test environment
+### Configure local environment
 
 Create a `.env` file in the root of the project with the environment variables mentioned above:
 
@@ -63,6 +63,19 @@ python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt -r requirements-test.txt
 python main_local.py
+```
+
+### Git Hooks
+
+This project uses Git hooks to ensure code quality:
+
+- **pre-commit**: Automatically formats, lints, and type-checks code before committing
+- **pre-push**: Runs full test suite with coverage check before pushing to remote
+
+Install the hooks with:
+
+```shell
+./scripts/install-hooks.sh
 ```
 
 ### Running tests and linting
