@@ -1,10 +1,28 @@
+# Development and non-runtime files
 README.md
-logo
-.venv
-.env*
-.gcloudignore
-.git
-.gitignore
-.idea
+CLAUDE.md
+.coveragerc
+.pytest_cache/
+.ruff_cache/
+pytest.ini
+pyproject.toml
 requirements-test.txt
-*test.py
+logo/
+tests/
+main_local.py
+.coverage
+htmlcov/
+coverage.xml
+
+# Editor and version control files
+.gcloudignore
+.git/
+.gitignore
+.github/
+.idea/
+.vscode/
+
+# Environment files
+.venv/
+.env*
+__pycache__/
