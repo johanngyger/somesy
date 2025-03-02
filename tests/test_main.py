@@ -1,7 +1,6 @@
 from unittest.mock import patch
 
 import functions_framework
-import pytest
 
 import main
 
@@ -17,9 +16,9 @@ def test_somesy_cloud_function():
             },
             data={}
         )
-        
+
         # Call the cloud function
         main.somesy(cloud_event)
-        
+
         # Verify sync was called with the correct parameter
         mock_sync.assert_called_once_with(48)

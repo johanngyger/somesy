@@ -10,8 +10,10 @@ def age_in_hours(post) -> float:
     age: float = (datetime.now() - created).total_seconds() / 3600
     return age
 
+
 def is_in_main_feed(post) -> bool:
     return post['distribution']['feedDistribution'] == 'MAIN_FEED'
+
 
 def recent_linkedin_posts(max_age_in_hours: int = 24) -> list[dict[str, str]]:
     linkedin_token = os.getenv('LINKEDIN_TOKEN')
@@ -30,6 +32,7 @@ def recent_linkedin_posts(max_age_in_hours: int = 24) -> list[dict[str, str]]:
     if response.status_code != 200:
         raise Exception(f'LinkedIn API request failed with status {response.status_code}: {response.text}')
     posts: list[dict[str, str]] = response.json()['elements']
-    recent_posts: list[dict[str, str]] = [post for post in posts if is_in_main_feed(post) and age_in_hours(post) < max_age_in_hours]
+    recent_posts: list[dict[str, str]] = [post for post in posts if
+                                          is_in_main_feed(post) and age_in_hours(post) < max_age_in_hours]
     print(f'Recent LinkedIn posts: {recent_posts}')
     return recent_posts

@@ -28,11 +28,11 @@ def test_linkedin_to_slack_new_posts(mock_linkedin_posts, mock_slack_messages):
             with patch("sync.slackc.post_slack_message") as mock_slack_post:
                 # Run the function
                 sync.linkedin_to_slack(24)
-                
+
                 # Verify expected calls
                 mock_linkedin.assert_called_once_with(24)
                 mock_slack_get.assert_called_once()
-                
+
                 # Should only post post-2, which isn't in the mock messages
                 assert mock_slack_post.call_count == 1
                 mock_slack_post.assert_called_once_with("https://www.linkedin.com/feed/update/post-2")
@@ -47,10 +47,10 @@ def test_linkedin_to_slack_no_new_posts():
             with patch("sync.slackc.post_slack_message") as mock_slack_post:
                 # Run the function
                 sync.linkedin_to_slack(24)
-                
+
                 # Verify expected calls
                 mock_linkedin.assert_called_once_with(24)
                 mock_slack_get.assert_called_once()
-                
+
                 # Should not post anything as the post is already in Slack
                 mock_slack_post.assert_not_called()

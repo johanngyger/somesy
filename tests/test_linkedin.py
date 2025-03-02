@@ -46,9 +46,9 @@ def test_age_in_hours():
     now = datetime.now()
     post_time = int((now - timedelta(hours=5)).timestamp() * 1000)
     post = {"createdAt": post_time}
-    
+
     age = linkedin.age_in_hours(post)
-    
+
     # Allow some wiggle room for test execution time
     assert 4.9 < age < 5.1
 
@@ -67,10 +67,10 @@ def test_recent_linkedin_posts(mock_env_vars, mock_linkedin_response):
         json=mock_linkedin_response,
         status=200
     )
-    
+
     # Call the function with 24 hour window
     posts = linkedin.recent_linkedin_posts(24)
-    
+
     # Should only return the first post (recent and in main feed)
     assert len(posts) == 1
     assert posts[0]["id"] == "post-1"
@@ -85,9 +85,9 @@ def test_linkedin_api_error(mock_env_vars):
         json={"message": "API error"},
         status=401
     )
-    
+
     # Should raise an exception
     with pytest.raises(Exception) as e:
         linkedin.recent_linkedin_posts()
-    
+
     assert "LinkedIn API request failed with status 401" in str(e.value)

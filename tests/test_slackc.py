@@ -19,7 +19,7 @@ def mock_env_vars():
 def test_slack_channel_id():
     with patch.dict(os.environ, {"SLACK_CHANNEL_ID": "test-channel"}):
         assert slackc.slack_channel_id() == "test-channel"
-    
+
     # Test default value
     with patch.dict(os.environ, {}, clear=True):
         assert slackc.slack_channel_id() == ""
@@ -47,7 +47,7 @@ def test_slack_messages(mock_env_vars):
     with patch.object(slackc, "slack_client") as mock_client:
         mock_instance = MagicMock()
         mock_client.return_value = mock_instance
-        
+
         mock_instance.conversations_history.return_value = {
             "ok": True,
             "messages": [
@@ -55,9 +55,9 @@ def test_slack_messages(mock_env_vars):
                 {"text": "Message 2"}
             ]
         }
-        
+
         messages = slackc.slack_messages()
-        
+
         # Verify correct parameters
         mock_instance.conversations_history.assert_called_once_with(channel="C12345678")
         assert len(messages) == 2
@@ -68,11 +68,11 @@ def test_post_slack_message(mock_env_vars):
     with patch.object(slackc, "slack_client") as mock_client:
         mock_instance = MagicMock()
         mock_client.return_value = mock_instance
-        
+
         slackc.post_slack_message("Test message")
-        
+
         # Verify correct parameters
         mock_instance.chat_postMessage.assert_called_once_with(
-            channel="C12345678", 
+            channel="C12345678",
             text="Test message"
         )
