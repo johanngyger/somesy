@@ -12,9 +12,9 @@ def test_somesy_cloud_function():
         cloud_event = functions_framework.CloudEvent(
             attributes={
                 "type": "google.cloud.pubsub.topic.v1.messagePublished",
-                "source": "//pubsub.googleapis.com/projects/project-id/topics/somesy"
+                "source": "//pubsub.googleapis.com/projects/project-id/topics/somesy",
             },
-            data={}
+            data={},
         )
 
         # Call the cloud function

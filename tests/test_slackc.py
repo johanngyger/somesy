@@ -9,10 +9,9 @@ import slackc
 
 @pytest.fixture
 def mock_env_vars():
-    with patch.dict(os.environ, {
-        "SLACK_TOKEN": "fake-slack-token",
-        "SLACK_CHANNEL_ID": "C12345678"
-    }):
+    with patch.dict(
+        os.environ, {"SLACK_TOKEN": "fake-slack-token", "SLACK_CHANNEL_ID": "C12345678"}
+    ):
         yield
 
 
@@ -38,8 +37,8 @@ def mock_slack_response():
         "ok": True,
         "messages": [
             {"type": "message", "text": "https://www.linkedin.com/feed/update/existing-post"},
-            {"type": "message", "text": "Just a regular message"}
-        ]
+            {"type": "message", "text": "Just a regular message"},
+        ],
     }
 
 
@@ -50,10 +49,7 @@ def test_slack_messages(mock_env_vars):
 
         mock_instance.conversations_history.return_value = {
             "ok": True,
-            "messages": [
-                {"text": "Message 1"},
-                {"text": "Message 2"}
-            ]
+            "messages": [{"text": "Message 1"}, {"text": "Message 2"}],
         }
 
         messages = slackc.slack_messages()
@@ -73,6 +69,5 @@ def test_post_slack_message(mock_env_vars):
 
         # Verify correct parameters
         mock_instance.chat_postMessage.assert_called_once_with(
-            channel="C12345678",
-            text="Test message"
+            channel="C12345678", text="Test message"
         )

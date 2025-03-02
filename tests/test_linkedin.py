@@ -10,10 +10,9 @@ import linkedin
 
 @pytest.fixture
 def mock_env_vars():
-    with patch.dict(os.environ, {
-        "LINKEDIN_TOKEN": "fake-token",
-        "LINKEDIN_AUTHOR": "urn:li:organization:12345"
-    }):
+    with patch.dict(
+        os.environ, {"LINKEDIN_TOKEN": "fake-token", "LINKEDIN_AUTHOR": "urn:li:organization:12345"}
+    ):
         yield
 
 
@@ -25,18 +24,18 @@ def mock_linkedin_response():
             {
                 "id": "post-1",
                 "createdAt": post_time,
-                "distribution": {"feedDistribution": "MAIN_FEED"}
+                "distribution": {"feedDistribution": "MAIN_FEED"},
             },
             {
                 "id": "post-2",
                 "createdAt": post_time - 1000 * 3600 * 48,  # 48 hours older
-                "distribution": {"feedDistribution": "MAIN_FEED"}
+                "distribution": {"feedDistribution": "MAIN_FEED"},
             },
             {
                 "id": "post-3",
                 "createdAt": post_time,
-                "distribution": {"feedDistribution": "NONE"}  # Not in main feed
-            }
+                "distribution": {"feedDistribution": "NONE"},  # Not in main feed
+            },
         ]
     }
 
@@ -65,7 +64,7 @@ def test_recent_linkedin_posts(mock_env_vars, mock_linkedin_response):
         responses.GET,
         "https://api.linkedin.com/rest/posts?author=urn%3Ali%3Aorganization%3A12345&q=author&count=10&sortBy=CREATED",
         json=mock_linkedin_response,
-        status=200
+        status=200,
     )
 
     # Call the function with 24 hour window
@@ -83,7 +82,7 @@ def test_linkedin_api_error(mock_env_vars):
         responses.GET,
         "https://api.linkedin.com/rest/posts?author=urn%3Ali%3Aorganization%3A12345&q=author&count=10&sortBy=CREATED",
         json={"message": "API error"},
-        status=401
+        status=401,
     )
 
     # Should raise an exception
