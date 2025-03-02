@@ -40,6 +40,19 @@ Under OAuth & Permissions, set the following Bot Token Scopes:
 
 ### Deploying the function
 
+Check that the right files are uploaded:
+
+```shell
+❯ gcloud meta list-files-for-upload
+sync.py
+requirements.txt
+slackc.py
+linkedin.py
+main.py
+```
+
+Deploy the function:
+
 ```shell
 gcloud functions deploy <function-name> --gen2 --runtime=python312 --region=europe-west6 --source=. --trigger-topic=somesy
 ```

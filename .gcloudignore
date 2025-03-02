@@ -13,6 +13,9 @@ main_local.py
 .coverage
 htmlcov/
 coverage.xml
+.mypy_cache/
+*.pyc
+scripts/
 
 # Editor and version control files
 .gcloudignore
