@@ -41,7 +41,7 @@ Under OAuth & Permissions, set the following Bot Token Scopes:
 ### Deploying the function
 
 ```shell
-gcloud functions deploy somesy-uphill --gen2 --runtime=python312 --region=europe-west6 --source=. --trigger-topic=somesy
+gcloud functions deploy <function-name> --gen2 --runtime=python312 --region=europe-west6 --source=. --trigger-topic=somesy
 ```
 
 ## Local development and testing
@@ -65,7 +65,7 @@ pip install -r requirements.txt -r requirements-test.txt
 python main_local.py
 ```
 
-### Running tests
+### Running tests and linting
 
 Run the automated test suite:
 
@@ -79,8 +79,26 @@ Run a specific test file:
 pytest tests/test_linkedin.py -v
 ```
 
-Run tests with coverage (requires pytest-cov):
+Run tests with coverage:
 
 ```shell
 pytest --cov=. --cov-report=term
+```
+
+Lint and check code quality:
+
+```shell
+ruff check .
+```
+
+Format code:
+
+```shell
+ruff format .
+```
+
+Check type hints:
+
+```shell
+mypy --ignore-missing-imports .
 ```
