@@ -1,0 +1,47 @@
+[run]
+source = .
+omit =
+    # Omit test files
+    */tests/*
+    # Omit virtual environments
+    */.venv/*
+    # Omit local development script
+    */main_local.py
+    # Omit the Python cache
+    */__pycache__/*
+    # Standard library files
+    */site-packages/*
+
+[report]
+# Regexes for lines to exclude from consideration
+exclude_lines =
+    # Skip any pragma comments
+    pragma: no cover
+    
+    # Don't complain about missing debug-only code
+    def __repr__
+    if self\.debug
+    
+    # Don't complain if tests don't hit defensive assertion code
+    raise NotImplementedError
+    except ImportError
+    
+    # Don't complain if non-runnable code isn't run
+    if 0:
+    if __name__ == .__main__.:
+    pass
+    
+    # Don't complain about abstract methods
+    @(abc\.)?abstractmethod
+
+# Show missing lines in the report
+show_missing = True
+
+# Fail if coverage is below this threshold
+fail_under = 90
+
+[html]
+directory = htmlcov
+
+[xml]
+output = coverage.xml

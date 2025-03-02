@@ -1,2 +1,19 @@
 .env*
 __pycache__
+
+# Virtual Environment
+.venv/
+
+# Coverage
+.coverage
+coverage.xml
+htmlcov/
+
+# Testing
+.pytest_cache/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo

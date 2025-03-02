@@ -41,7 +41,7 @@ Under OAuth & Permissions, set the following Bot Token Scopes:
 ### Deploying the function
 
 ```shell
-gcloud functions deploy somesy --gen2 --runtime=python312 --region=europe-west6 --source=. --trigger-topic=somesy
+gcloud functions deploy somesy-uphill --gen2 --runtime=python312 --region=europe-west6 --source=. --trigger-topic=somesy
 ```
 
 ## Local development and testing
@@ -59,8 +59,28 @@ SLACK_TOKEN=...
 Install the required packages and run the function locally:
 
 ```shell
-pythons -m venv .venv
+python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt -r requirements-test.txt
-python main_test.py
+python main_local.py
+```
+
+### Running tests
+
+Run the automated test suite:
+
+```shell
+pytest
+```
+
+Run a specific test file:
+
+```shell
+pytest tests/test_linkedin.py -v
+```
+
+Run tests with coverage (requires pytest-cov):
+
+```shell
+pytest --cov=. --cov-report=term
 ```

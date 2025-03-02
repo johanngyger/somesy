@@ -1,1 +1,5 @@
 python-dotenv
+pytest
+pytest-mock
+pytest-cov
+responses
