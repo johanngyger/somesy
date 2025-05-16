@@ -21,7 +21,7 @@ def recent_linkedin_posts(max_age_in_hours: int = 24) -> List[Dict[str, Any]]:
     headers: Dict[str, str] = {
         "Authorization": f"Bearer {linkedin_token}",
         "X-Restli-Protocol-Version": "2.0.0",
-        "LinkedIn-Version": "202405",
+        "LinkedIn-Version": "202505",
     }
     # https://learn.microsoft.com/en-us/linkedin/shared/api-guide/concepts/urns
     # urn:{namespace}:{entityType}:{id}, where: entityType is 'organization' or 'person'

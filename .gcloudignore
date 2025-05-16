@@ -24,6 +24,7 @@ scripts/
 .github/
 .idea/
 .vscode/
+.DS_Store
 
 # Environment files
 .venv/
