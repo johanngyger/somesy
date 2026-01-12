@@ -1,4 +1,5 @@
 import os
+import re
 from typing import Any, Dict, List
 
 from slack_sdk import WebClient
@@ -19,12 +20,22 @@ def slack_messages() -> List[Dict[str, Any]]:
     # https://api.slack.com/methods/conversations.history
     channel_id = slack_channel_id()
     response: SlackResponse = slack_client().conversations_history(channel=channel_id)
-    print(f"Slack messages from channel {channel_id}: {response}")
     messages: List[Dict[str, Any]] = response["messages"]
+    # Extract URNs from message URLs for logging
+    urns = []
+    for m in messages:
+        text = m.get("text", "")
+        match = re.search(r"(urn:li:(?:activity|share|ugcPost):\d+)", text)
+        if match:
+            urns.append(match.group(1))
+    # Sort by ID ascending (oldest first)
+    sorted_urns = sorted(urns, key=lambda u: int(u.split(":")[-1]))
+    print(f"Slack channel: {len(sorted_urns)} LinkedIn posts:")
+    for urn in sorted_urns:
+        print(f"  {urn}")
     return messages
 
 
 def post_slack_message(message: str) -> None:
-    channel_id = slack_channel_id()
-    print(f"Posting Slack message to channel {channel_id}: {message}")
+    print(f"Posting to Slack: {message}")
     slack_client().chat_postMessage(channel=slack_channel_id(), text=message)

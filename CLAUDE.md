@@ -27,5 +27,20 @@
 ## Project
 
 somesy is a serverless function that syncs LinkedIn posts to a Slack channel.
-Dependencies: functions-framework, requests, slack_sdk, aiohttp (runtime)
-and pytest, pytest-cov, responses, pytest-mock (testing)
+
+### Architecture
+- **linkedin.py**: LinkedIn API integration (Voyager API + official Posts API fallback)
+- **slackc.py**: Slack SDK wrapper for reading/posting messages
+- **sync.py**: Syncs LinkedIn posts to Slack (deduplication logic)
+- **main.py**: Cloud Function entry point
+- **main_local.py**: Local development entry point (uses .env file)
+
+### LinkedIn APIs
+- **Official Posts API** (`/rest/posts`): Returns posts with `urn:li:share` or `urn:li:ugcPost` URNs
+- **Voyager API** (internal): Returns all posts including those created via LinkedIn's native scheduler (`urn:li:activity` URNs)
+
+The sync logic tries Voyager first, falls back to official API if Voyager returns empty.
+
+### Dependencies
+Runtime: functions-framework, requests, slack_sdk, aiohttp
+Testing: pytest, pytest-cov, responses, pytest-mock
