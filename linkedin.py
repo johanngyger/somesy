@@ -44,20 +44,28 @@ def recent_voyager_posts(max_age_in_hours: int = 24) -> List[str]:
     Raises an exception if the API call fails.
     """
     li_at = os.getenv("LINKEDIN_LI_AT")
-    csrf_token = os.getenv("LINKEDIN_CSRF_TOKEN")
     org_id = os.getenv("LINKEDIN_ORG_ID")
 
-    if not all([li_at, csrf_token, org_id]):
+    if not all([li_at, org_id]):
         print("LinkedIn Voyager API: credentials not configured, skipping")
         return []
 
     # Type narrowing for mypy after the None check above
-    assert li_at is not None and csrf_token is not None
+    assert li_at is not None
+
+    csrf_token = "ajax:3251812316828477309"  # Just needs to match header and cookie
 
     headers: Dict[str, str] = {
         "accept": "application/vnd.linkedin.normalized+json+2.1",
+        "accept-language": "en-US,en;q=0.9",
         "csrf-token": csrf_token,
         "x-restli-protocol-version": "2.0.0",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:134.0) Gecko/20100101 Firefox/134.0",
+        "referer": "https://www.linkedin.com/",
+        "origin": "https://www.linkedin.com",
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "same-origin",
     }
     cookies: Dict[str, str] = {
         "li_at": li_at,
@@ -71,11 +79,16 @@ def recent_voyager_posts(max_age_in_hours: int = 24) -> List[str]:
     )
     query_id = "voyagerFeedDashOrganizationalPageAdminUpdates.674de8f5f692ab9c9ce0ab819ecae05e"
 
-    response = requests.get(
-        f"https://www.linkedin.com/voyager/api/graphql?includeWebMetadata=true&variables={variables}&queryId={query_id}",
-        headers=headers,
-        cookies=cookies,
-    )
+    try:
+        session = requests.Session()
+        session.max_redirects = 3  # Valid requests don't need many redirects
+        response = session.get(
+            f"https://www.linkedin.com/voyager/api/graphql?includeWebMetadata=true&variables={variables}&queryId={query_id}",
+            headers=headers,
+            cookies=cookies,
+        )
+    except requests.exceptions.TooManyRedirects:
+        raise Exception("LinkedIn authentication failed: Invalid or expired LINKEDIN_LI_AT cookie.")
 
     if response.status_code != 200:
         raise Exception(
@@ -161,6 +174,9 @@ def recent_post_urls(max_age_in_hours: int = 24) -> List[str]:
             f"https://www.linkedin.com/feed/update/urn:li:activity:{aid}" for aid in activity_ids
         ]
 
-    # Fall back to official Posts API
-    posts = recent_official_api_posts(max_age_in_hours)
-    return [f"https://www.linkedin.com/feed/update/{post['id']}" for post in posts]
+    # Fall back to official Posts API if token is configured
+    if os.getenv("LINKEDIN_TOKEN"):
+        posts = recent_official_api_posts(max_age_in_hours)
+        return [f"https://www.linkedin.com/feed/update/{post['id']}" for post in posts]
+
+    return []

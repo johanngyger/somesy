@@ -109,6 +109,8 @@ pip install -r requirements.txt -r requirements-test.txt
 python main_local.py
 ```
 
+After initial setup, you can run the function with: `.venv/bin/python main_local.py``
+
 ### Git Hooks
 
 This project uses Git hooks to ensure code quality:

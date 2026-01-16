@@ -251,12 +251,25 @@ def test_recent_post_urls_uses_voyager() -> None:
 
 def test_recent_post_urls_falls_back_to_official() -> None:
     # When Voyager returns empty, fall back to official API
-    with patch("linkedin.recent_voyager_posts", return_value=[]):
-        with patch(
-            "linkedin.recent_official_api_posts",
-            return_value=[{"id": "urn:li:share:333333"}],
-        ) as mock_official:
-            urls = linkedin.recent_post_urls(48)
+    with patch.dict(os.environ, {"LINKEDIN_TOKEN": "test_token"}):
+        with patch("linkedin.recent_voyager_posts", return_value=[]):
+            with patch(
+                "linkedin.recent_official_api_posts",
+                return_value=[{"id": "urn:li:share:333333"}],
+            ) as mock_official:
+                urls = linkedin.recent_post_urls(48)
 
-            assert urls == ["https://www.linkedin.com/feed/update/urn:li:share:333333"]
-            mock_official.assert_called_once_with(48)
+                assert urls == ["https://www.linkedin.com/feed/update/urn:li:share:333333"]
+                mock_official.assert_called_once_with(48)
+
+
+def test_recent_post_urls_no_fallback_without_token() -> None:
+    # When Voyager returns empty and no token, return empty list
+    with patch.dict(os.environ, {}, clear=False):
+        # Ensure LINKEDIN_TOKEN is not set
+        env = os.environ.copy()
+        env.pop("LINKEDIN_TOKEN", None)
+        with patch.dict(os.environ, env, clear=True):
+            with patch("linkedin.recent_voyager_posts", return_value=[]):
+                urls = linkedin.recent_post_urls(48)
+                assert urls == []
