@@ -16,6 +16,7 @@ coverage.xml
 .mypy_cache/
 *.pyc
 scripts/
+.claude/
 
 # Editor and version control files
 .gcloudignore

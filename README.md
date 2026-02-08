@@ -18,7 +18,6 @@ The following environment variables are required:
 Posts created via LinkedIn's native scheduler are not returned by the official Posts API. To sync these posts, configure the Voyager API credentials:
 
 - `LINKEDIN_LI_AT`: The `li_at` cookie from a logged-in LinkedIn session
-- `LINKEDIN_CSRF_TOKEN`: The `JSESSIONID` cookie value (without quotes)
 
 To get the cookie values:
 1. Log in to LinkedIn in your browser
@@ -33,7 +32,7 @@ The Voyager API is LinkedIn's internal, undocumented API. It can break without n
 
 | Error | Cause | Solution |
 |-------|-------|----------|
-| 401/403 | Expired session cookies | Refresh `LINKEDIN_LI_AT` and `LINKEDIN_CSRF_TOKEN` from browser |
+| 401/403 | Expired session cookies | Refresh `LINKEDIN_LI_AT` from browser |
 | 400 | Outdated `queryId` | Update `queryId` in `linkedin.py` (see below) |
 | Empty response | API structure changed | Check if `included` array format changed |
 
